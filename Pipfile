@@ -12,6 +12,7 @@ django-extensions = "*"
 pymongo = {extras = ["srv"], version = "*"}
 djongo = "*"
 dnspython = "*"
+elasticsearch = "==6.3.1"
 
 [dev-packages]
 black = "*"
