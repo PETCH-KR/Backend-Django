@@ -4,13 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-black = "*"
-djongo = "*"
-pymongo = "*"
-djangorestframework = "*"
 django = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
+drf-yasg = "*"
+django-extensions = "*"
+pymongo = {extras = ["srv"], version = "*"}
+djongo = "*"
+dnspython = "*"
 
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
