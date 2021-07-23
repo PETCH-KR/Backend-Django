@@ -19,4 +19,11 @@ class AirportAPIView(APIView):
     def get(self, request, name):
         airport = self.get_object(name)
         serializer = AirportSerializer(airport, many=True)
-        return Response(serializer.data)
+        airports_data = serializer.data
+        airports_len = len(airports_data)
+        response_object = {
+            "success": True,
+            "message": f"{airports_len}개의 공항 검색 결과가 나왔습니다.",
+            "data": {"airports_data": airports_data},
+        }
+        return Response(response_object)
