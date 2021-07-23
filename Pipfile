@@ -12,6 +12,7 @@ django-extensions = "*"
 pymongo = {extras = ["srv"], version = "*"}
 djongo = "*"
 dnspython = "*"
+python-dotenv = "*"
 
 [dev-packages]
 black = "*"
