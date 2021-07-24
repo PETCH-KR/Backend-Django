@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "drf_yasg",
     "rest_framework",
     "django_extensions",
@@ -82,9 +83,7 @@ DATABASES = {
         "ENGINE": "djongo",
         "NAME": "Petch",
         "ENFORCE_SCHEMA": False,
-        "CLIENT": {
-            "host": os.getenv("MONGO_HOST")
-        },
+        "CLIENT": {"host": os.getenv("MONGO_HOST")},
     }
 }
 
@@ -130,3 +129,6 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+AUTH_USER_MODEL = "server.User"
