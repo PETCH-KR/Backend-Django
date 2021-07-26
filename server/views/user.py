@@ -35,7 +35,7 @@ class SignupView(APIView):
                 ),
             },
         ),
-        responses={200: success_resp},
+        responses={201: success_resp},
     )
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -46,7 +46,7 @@ class SignupView(APIView):
                 "message": "성공적으로 회원가입이 완료되었습니다.",
                 "data": {"user": UserSerializer(new_user).data},
             }
-            return Response(response_object)
+            return Response(response_object, status=status.HTTP_201_CREATED)
         else:
             response_object = {
                 "success": False,
