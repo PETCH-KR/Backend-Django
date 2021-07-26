@@ -2,10 +2,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from server.serializers import UserSerializer
-from server.models import User
 
 
-class UserView(APIView):
+class SignupView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
