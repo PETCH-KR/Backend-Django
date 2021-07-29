@@ -29,7 +29,7 @@ class snsForm(forms.ModelForm):
         fields = ("sns", "name")
 
 
-class organiztion(models.Model):
+class organization(models.Model):
     name = models.CharField(max_length=100)
     ceo = models.CharField(max_length=100)
     description = models.TextField()
@@ -39,5 +39,3 @@ class organiztion(models.Model):
     fax = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     sns = models.ArrayField(model_container=sns, model_form_class=snsForm)
-
-    objects = models.DjongoManager()

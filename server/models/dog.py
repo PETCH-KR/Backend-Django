@@ -20,5 +20,6 @@ class dog(models.Model):
     def __str__(self):
         return self.IATA
 
-e = dog(name='hi', organization=None)
+
+e = dog(name="hi", organization=None)
 e.clean_fields()
