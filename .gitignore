@@ -1,6 +1,9 @@
 .vscode
 .idea
 .env
+*/__pycache__/*
+*/*/__pycache__/*
+*/*/*/__pycache__/*
 config/__pycache__/*
 server/__pycache__/*
 server/models/__pycache__/*
