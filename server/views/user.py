@@ -1,5 +1,6 @@
 import os
 import jwt
+import requests
 from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
@@ -11,27 +12,10 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from server.models import User
 from server.utils.jwt import generate_refresh_token, generate_access_token
+from server.utils import error_collection, success_util
 
 
 class SignupView(APIView):
-    success_field = openapi.Schema(
-        "success", description="성공 여부", type=openapi.TYPE_BOOLEAN
-    )
-    message_field = openapi.Schema(
-        "detail", description="메세지", type=openapi.TYPE_STRING
-    )
-    data_field = openapi.Schema("data", description="회원 정보", type=openapi.TYPE_OBJECT)
-    success_resp = openapi.Schema(
-        "response",
-        type=openapi.TYPE_OBJECT,
-        properties={
-            "success": success_field,
-            "message": message_field,
-            "data": data_field,
-        },
-    )
-    http_method_names = ["post"]
-
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -42,9 +26,21 @@ class SignupView(APIView):
                 ),
             },
         ),
-        responses={201: success_resp},
+        responses={
+            201: success_util.SUCCESS_SIGNUP.as_obj(),
+            400: error_collection.SIGNUP_400_EMAIL_ALREADY_EXIST.as_md()
+            + error_collection.SIGNUP_400_NULL_EMAIL_PASSWORD.as_md(),
+        },
     )
     def post(self, request):
+        if not request.data.get("password") or not request.data.get("email"):
+            response_object = {
+                "success": False,
+                "message": "이메일 또는 비밀번호를 입력해주세요.",
+                "code": "SIGNUP_400_NULL_EMAIL_PASSWORD",
+            }
+            return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             new_user = serializer.save()
@@ -55,36 +51,30 @@ class SignupView(APIView):
             }
             return Response(response_object, status=status.HTTP_201_CREATED)
         else:
-            response_object = {
-                "success": False,
-                "message": "에러 발생",
-                "data": {"error": serializer.errors},
-            }
-            return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
+            if serializer.errors["email"]:
+                response_object = {
+                    "success": False,
+                    "message": "이미 사용중인 이메일입니다.",
+                    "code": "SIGNUP_400_EMAIL_ALREADY_EXIST",
+                }
+                return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MeView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        return Response(
-            {
-                "success": True,
-                "message": "사용자 정보를 불러왔습니다.",
-                "data": {"user": UserSerializer(request.user).data},
-            }
-        )
-
-    def put(self, request):
-        serializer = UserSerializer(request.user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response()
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
+@swagger_auto_schema(
+    methods=["POST"],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+            "password": openapi.Schema(type=openapi.TYPE_STRING, description="비밀번호"),
+        },
+    ),
+    responses={
+        200: success_util.SUCCESS_SIGNIN.as_obj(),
+        400: error_collection.SIGNIN_400_NULL_EMAIL_PASSWORD.as_md(),
+        401: error_collection.SIGNIN_401_INVALID_EMAIL_PASSWORD.as_md(),
+    },
+)
 @api_view(["POST"])
 def signin(request):
     email = request.data.get("email")
@@ -94,6 +84,7 @@ def signin(request):
             {
                 "success": False,
                 "message": "이메일 또는 비밀번호를 입력해주세요.",
+                "code": "SIGNIN_400_NULL_EMAIL_PASSWORD",
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
@@ -110,18 +101,87 @@ def signin(request):
                     "refresh_token": refresh_token,
                     "email": user.email,
                 },
-            }
+            },
+            status=status.HTTP_200_OK,
         )
     else:
         return Response(
             {
                 "success": False,
-                "message": "이메일 또는 비밀번호를 입력해주세요.",
+                "code": "SIGNIN_401_INVALID_EMAIL_PASSWORD",
+                "message": "이메일 또는 비밀번호를 확인해주세요.",
             },
             status=status.HTTP_401_UNAUTHORIZED,
         )
 
 
+@swagger_auto_schema(
+    methods=["POST"],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "token": openapi.Schema(type=openapi.TYPE_STRING, description="카카오 액세스 토큰"),
+        },
+    ),
+    responses={
+        200: success_util.SUCCESS_KAKAO.as_obj(),
+        400: error_collection.KAKAO_400_NULL_TOKEN.as_md(),
+    },
+)
+@api_view(["POST"])
+def kakao(request):
+    token = request.data.get("token")
+    if not token:
+        return Response(
+            {
+                "success": False,
+                "message": "카카오로부터 받은 토큰을 보내주세요.",
+                "code": "KAKAO_400_NULL_TOKEN",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    profile_request = requests.get(
+        "https://kapi.kakao.com/v2/user/me",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    profile_json = profile_request.json()
+    kakao_account = profile_json.get("kakao_account")
+    email = kakao_account.get("email", None)
+    if not User.objects.filter(provider="KAKAO", email=email).exists():
+        User(
+            provider="KAKAO",
+            email=email,
+        ).save()
+    user = User.objects.get(provider="KAKAO", email=email)
+    access_token = generate_access_token(user)
+    refresh_token = generate_refresh_token(user)
+    return Response(
+        {
+            "success": True,
+            "message": "카카오 로그인에 성공했습니다.",
+            "data": {
+                "access_token": access_token,
+                "refresh_token": refresh_token,
+                "email": user.email,
+            },
+        }
+    )
+
+
+@swagger_auto_schema(
+    methods=["POST"],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "token": openapi.Schema(type=openapi.TYPE_STRING, description="카카오 액세스 토큰"),
+        },
+    ),
+    responses={
+        200: success_util.SUCCESS_REFRESH_TOKEN.as_obj(),
+        400: error_collection.JWT_400_NULL_TOKEN.as_md(),
+        401: error_collection.JWT_401_TOKEN_EXPIRED.as_md(),
+    },
+)
 @api_view(["POST"])
 def refresh(request):
     try:
@@ -130,8 +190,10 @@ def refresh(request):
             return Response(
                 {
                     "success": False,
-                    "message": "refreshtoken을 보내주세요.",
-                }
+                    "message": "refresh_token을 보내주세요.",
+                    "code": "JWT_400_NULL_TOKEN",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
         decoded = jwt.decode(
             refresh_token, os.getenv("REFRESH_SECRET_KEY"), algorithms=["HS256"]
@@ -156,7 +218,8 @@ def refresh(request):
         return Response(
             {
                 "success": False,
-                "message": "refreshtoken이 만료되었습니다.",
+                "message": "refresh_token이 만료되었습니다.",
+                "code": "JWT_401_TOKEN_EXPIRED",
             },
             status=status.HTTP_401_UNAUTHORIZED,
         )
