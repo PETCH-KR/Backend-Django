@@ -1,7 +1,6 @@
 import os
 import jwt
 from rest_framework import status
-from rest_framework import exceptions
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
@@ -128,7 +127,12 @@ def refresh(request):
     try:
         refresh_token = request.headers.get("refreshtoken")
         if refresh_token is None:
-            return None
+            return Response(
+                {
+                    "success": False,
+                    "message": "refreshtoken을 보내주세요.",
+                }
+            )
         decoded = jwt.decode(
             refresh_token, os.getenv("REFRESH_SECRET_KEY"), algorithms=["HS256"]
         )

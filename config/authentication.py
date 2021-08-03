@@ -19,6 +19,16 @@ class JWTAuthentication(authentication.BaseAuthentication):
             user = User.objects.get(id=id)
             return (user, None)
         except jwt.exceptions.DecodeError:
-            raise exceptions.AuthenticationFailed("잘못된 JWT입니다.")
+            raise exceptions.AuthenticationFailed(
+                {
+                    "success": False,
+                    "message": "잘못된 토큰입니다.",
+                }
+            )
         except jwt.ExpiredSignatureError:
-            raise exceptions.AuthenticationFailed("토큰이 만료되었습니다.")
+            raise exceptions.AuthenticationFailed(
+                {
+                    "success": False,
+                    "message": "토큰이 만료되었습니다.",
+                }
+            )
