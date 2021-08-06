@@ -13,6 +13,8 @@ pymongo = {extras = ["srv"], version = "*"}
 djongo = "*"
 dnspython = "*"
 python-dotenv = "*"
+pyjwt = "*"
+requests = "*"
 
 [dev-packages]
 black = "*"
