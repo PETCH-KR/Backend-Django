@@ -173,7 +173,7 @@ def kakao(request):
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
-            "token": openapi.Schema(type=openapi.TYPE_STRING, description="카카오 액세스 토큰"),
+            "token": openapi.Schema(type=openapi.TYPE_STRING, description="리프레시 토큰"),
         },
     ),
     responses={
