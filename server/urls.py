@@ -1,8 +1,10 @@
 from django.urls import path
-from server.views import AirportAPIView, SignupView
-
+from . import views
 
 urlpatterns = [
-    path("user/signup", SignupView.as_view()),
-    path("airport/<str:name>/", AirportAPIView.as_view()),
+    path("user/signup", views.SignupView.as_view()),
+    path("user/signin", views.signin),
+    path("user/kakao", views.kakao),
+    path("refresh", views.refresh),
+    path("airport/<str:name>/", views.AirportAPIView.as_view()),
 ]

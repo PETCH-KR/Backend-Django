@@ -1,7 +1,8 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2bfa5398105813e9c54aca2c1c38eef95de939ccf00130ac3daa0d345732c047"
+
+            "sha256": "9b6d2826e6ae233dcad6da2debc2f417b97b4085f10f93c5a42b832a34250540"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -60,6 +61,7 @@
             ],
             "index": "pypi",
             "version": "==3.1.12"
+
         },
         "django-cors-headers": {
             "hashes": [
@@ -186,6 +188,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==21.0"
+        },
+        "pyjwt": {
+            "hashes": [
+                "sha256:934d73fbba91b0483d3857d1aff50e96b2a892384ee2c17417ed3203f173fca1",
+                "sha256:fba44e7898bbca160a2b2b501f492824fc8382485d3a6f11ba5d0c1937ce6130"
+            ],
+            "index": "pypi",
+            "version": "==2.1.0"
         },
         "pymongo": {
             "extras": [
@@ -322,7 +332,7 @@
                 "sha256:6c1246513ecd5ecd4528a0906f910e8f0f9c6b8ec72030dc9fd154dc1a6efd24",
                 "sha256:b8aa58f8cf793ffd8782d3d8cb19e66ef36f7aba4353eec859e74678b01b07a7"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
+            "index": "pypi",
             "version": "==2.26.0"
         },
         "ruamel.yaml": {
@@ -475,6 +485,7 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==1.2.1"
+
         }
     }
 }
