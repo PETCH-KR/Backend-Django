@@ -9,12 +9,13 @@ djangorestframework = "*"
 django-cors-headers = "*"
 drf-yasg = "*"
 django-extensions = "*"
-pymongo = {extras = ["srv"], version = "*"}
 djongo = "*"
 dnspython = "*"
 python-dotenv = "*"
 pyjwt = "*"
 requests = "*"
+bson = "*"
+pymongo = "==3.7.2"
 
 [dev-packages]
 black = "*"

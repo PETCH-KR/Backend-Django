@@ -4,11 +4,13 @@ from .organization import Organization, OrganizationForm
 
 
 class Dog(models.Model):
+    _id = models.ObjectIdField(primary_key=True)
+    # id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
     deadline = models.DateField()
-    creaatedAt = models.DateField(auto_now_add=True)
+    createdAt = models.DateField(auto_now_add=True)
     destination = models.CharField(max_length=100)
 
     organization = models.EmbeddedField(

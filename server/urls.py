@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
@@ -6,5 +6,9 @@ urlpatterns = [
     path("user/signin", views.signin),
     path("user/kakao", views.kakao),
     path("refresh", views.refresh),
-    path("airport/<str:name>/", views.AirportAPIView.as_view()),
+    path("airport/<str:name>", views.AirportAPIView.as_view()),
+    path('dog/list/', views.DogAPIView.as_view()),
+    path('dog/description/', views.DogDescriptionAPIView.as_view()),
+
+
 ]
