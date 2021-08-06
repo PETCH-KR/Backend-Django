@@ -8,6 +8,7 @@ class DogSerializer(serializers.ModelSerializer):
         fields = [
             "_id",
             "name",
+            "image",
             "breed",
             "organization",
             "deadline",
@@ -29,3 +30,9 @@ class DogDescriptionSerializer(serializers.ModelSerializer):
             "createdAt",
         ]
         # fields="__all__"
+
+
+class DogImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dog
+        fields = ["image", "destination"]

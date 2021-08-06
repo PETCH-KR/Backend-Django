@@ -31,10 +31,8 @@ class DogAPIView(APIView):
 class DogDescriptionAPIView(APIView):
     def get_queryset(self, request):
         _id = request.GET["_id"]
-        print("\n\n\n\n\n\n\n\n\n",_id)
         _id = ObjectId(_id)
         match = Dog.objects.get(pk=_id)
-        print("\n\n\n\n\n\n\n\n\n",match, "\n\n\n\n\n\n\n\n\n")
         return match
 
     def get(self, request):
@@ -48,3 +46,13 @@ class DogDescriptionAPIView(APIView):
             "data": {"dogs_data": desc_data},
         }
         return Response(response_object)
+
+class DogImageAPIView(APIView):
+    def post(self, request):
+        dog_serializer = DogImageSerializer(data = request.data)
+        print(dog_serializer)
+        if dog_serializer.is_valid():
+            dog_serializer.save()
+            return Response({"message": "success"})
+        else:
+            return Response ({"message": "fail"})

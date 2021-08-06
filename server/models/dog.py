@@ -1,6 +1,9 @@
 # from django.db import models
 from djongo import models
 from .organization import Organization, OrganizationForm
+from django.conf import settings
+from djongo.storage import GridFSStorage
+
 
 
 class Dog(models.Model):
@@ -11,6 +14,7 @@ class Dog(models.Model):
     deadline = models.DateField()
     createdAt = models.DateField(auto_now_add=True)
     destination = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="dogs", null=True)
 
     organization = models.EmbeddedField(
         model_container=Organization, model_form_class=OrganizationForm

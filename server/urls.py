@@ -9,6 +9,8 @@ urlpatterns = [
     path("airport/<str:name>", views.AirportAPIView.as_view()),
     path('dog/list/', views.DogAPIView.as_view()),
     path('dog/description/', views.DogDescriptionAPIView.as_view()),
+    path('dog/image/', views.DogImageAPIView.as_view()),
+
 
 
 ]
