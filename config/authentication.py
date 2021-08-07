@@ -10,7 +10,13 @@ class JWTAuthentication(authentication.BaseAuthentication):
         try:
             token = request.headers.get("AUTHORIZATION")
             if token is None:
-                return None
+                raise exceptions.AuthenticationFailed(
+                    {
+                        "success": False,
+                        "message": "토큰이 존재하지 않습니다.",
+                        "code": "JWT_403_NOT_FOUND_ACCESSTOKEN",
+                    }
+                )
             jwt_token = token
             decoded = jwt.decode(
                 jwt_token, os.getenv("JWT_SECRET_KEY"), algorithms=["HS256"]
@@ -23,6 +29,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
                 {
                     "success": False,
                     "message": "잘못된 토큰입니다.",
+                    "code": "JWT_403_INVALID_ACCESSTOKEN",
                 }
             )
         except jwt.ExpiredSignatureError:
@@ -30,5 +37,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
                 {
                     "success": False,
                     "message": "토큰이 만료되었습니다.",
+                    "code": "JWT_403_EXPIRED_ACCESSTOKEN",
                 }
             )
