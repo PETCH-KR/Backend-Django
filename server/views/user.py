@@ -4,7 +4,6 @@ import requests
 from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from server.serializers import UserSerializer
@@ -225,12 +224,12 @@ def refresh(request):
         )
 
 
-from server.models.upload import Upload
+from server.utils.upload import upload_image
 
 
 @api_view(["POST"])
 def upload_test(request):
     image = request.FILES["image"]
     # image, 폴더명(review | dog | org ~etc)
-    public_uri = Upload.upload_image(image, "review")
+    public_uri = upload_image(image, "review")
     return Response({"url": public_uri})
