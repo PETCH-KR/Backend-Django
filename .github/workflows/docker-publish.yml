@@ -2,8 +2,8 @@ name: Dokcer Publish
 
 on:
   push:
-    branches: [ deploy ]
-
+    branches:
+      - deploy
 
 jobs:
   build:
