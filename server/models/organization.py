@@ -54,7 +54,7 @@ class OrganizationForm(forms.ModelForm):
             "phone",
             "phone",
             "images",
-            "donations",
+            "donation",
             "fax",
             "email",
             "sns",
