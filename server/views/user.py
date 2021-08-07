@@ -233,6 +233,3 @@ def upload_test(request):
     # image, 폴더명(review | dog | org ~etc)
     public_uri = upload_image(image, "review")
     return Response({"url": public_uri})
-
-
-# docker test
