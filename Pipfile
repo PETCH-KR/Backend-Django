@@ -15,6 +15,9 @@ dnspython = "*"
 python-dotenv = "*"
 pyjwt = "*"
 requests = "*"
+google-auth-httplib2 = "*"
+google-auth-oauthlib = "*"
+django-storages = {extras = ["google"], version = "*"}
 
 [dev-packages]
 black = "*"
