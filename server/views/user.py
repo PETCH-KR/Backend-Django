@@ -223,3 +223,14 @@ def refresh(request):
             },
             status=status.HTTP_401_UNAUTHORIZED,
         )
+
+
+from server.models.upload import Upload
+
+
+@api_view(["POST"])
+def upload_test(request):
+    image = request.FILES["image"]
+    # image, 폴더명(review | dog | org ~etc)
+    public_uri = Upload.upload_image(image, "review")
+    return Response({"url": public_uri})

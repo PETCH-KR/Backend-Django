@@ -7,4 +7,5 @@ urlpatterns = [
     path("user/kakao", views.kakao),
     path("refresh", views.refresh),
     path("airport/<str:name>/", views.AirportAPIView.as_view()),
+    path("upload/test", views.upload_test),
 ]
