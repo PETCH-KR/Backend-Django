@@ -10,13 +10,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         try:
             token = request.headers.get("AUTHORIZATION")
             if token is None:
-                raise exceptions.AuthenticationFailed(
-                    {
-                        "success": False,
-                        "message": "토큰이 존재하지 않습니다.",
-                        "code": "JWT_403_NOT_FOUND_ACCESSTOKEN",
-                    }
-                )
+                return None
             jwt_token = token
             decoded = jwt.decode(
                 jwt_token, os.getenv("JWT_SECRET_KEY"), algorithms=["HS256"]
