@@ -16,10 +16,9 @@ pyjwt = "*"
 requests = "*"
 bson = "*"
 pymongo = "==3.7.2"
-pillow = "*"
-google-cloud-storage = "==1.10.0"
-django-storages = "*"
-
+google-auth-httplib2 = "*"
+google-auth-oauthlib = "*"
+django-storages = {extras = ["google"], version = "*"}
 [dev-packages]
 black = "*"
 
