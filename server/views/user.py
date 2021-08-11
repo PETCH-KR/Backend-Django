@@ -124,7 +124,7 @@ def signin(request):
     ),
     responses={
         200: success_util.SUCCESS_KAKAO.as_obj(),
-        400: error_collection.KAKAO_400_NULL_TOKEN.as_md(),
+        400: error_collection.KAKAO_400_NOT_FOUND_TOKEN.as_md(),
     },
 )
 @api_view(["POST"])
@@ -135,7 +135,7 @@ def kakao(request):
             {
                 "success": False,
                 "message": "카카오로부터 받은 토큰을 보내주세요.",
-                "code": "KAKAO_400_NULL_TOKEN",
+                "code": "KAKAO_400_NOT_FOUND_TOKEN",
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
