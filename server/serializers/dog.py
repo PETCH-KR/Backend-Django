@@ -30,9 +30,3 @@ class DogDescriptionSerializer(serializers.ModelSerializer):
             "createdAt",
         ]
         # fields="__all__"
-
-
-class DogImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Dog
-        fields = ["image", "destination"]
