@@ -1,4 +1,4 @@
-from server.serializers.airport import *
+from server.serializers.airport_serializer import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_yasg import openapi
@@ -52,3 +52,4 @@ class AirportAPIView(APIView):
                 "data": {"airports_data": airports_data},
             }
         )
+

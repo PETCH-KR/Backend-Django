@@ -1,3 +1,3 @@
-from .airport import *
+from .airport_serializer import *
 from .user import *
-from .dog import *
+from .dog_serializer import *
