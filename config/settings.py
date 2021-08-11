@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,9 +26,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ["34.127.14.204"]
-
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -147,5 +146,25 @@ REST_FRAMEWORK = {
     ],
 }
 
-BASE_URL = "http://127.0.0.1:8000/"
+# Google Cloud Storage
 
+GS_PROJECT_ID = os.getenv("GS_PROJECT_ID", "")
+GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME", "")
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
+    {
+        "type": "service_account",
+        "project_id": GS_PROJECT_ID,
+        "private_key_id": os.getenv("GS_PRIVATE_KEY_ID", ""),
+        "private_key": os.getenv("GS_PRIVATE_KEY", "").replace("\\n", "\n"),
+        "client_email": os.getenv("GS_CLIENT_EMAIL", ""),
+        "client_id": os.getenv("GS_CLIENT_ID", ""),
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": os.getenv("GS_CLIENT_x509_CERT_URL", ""),
+    }
+)
+
+DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
