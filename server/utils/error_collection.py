@@ -37,20 +37,20 @@ SIGNIN_401_INVALID_EMAIL_PASSWORD = ErrorCollection(
     message="이메일이나 비밀번호를 확인해주세요.",
 )
 
-KAKAO_400_NULL_TOKEN = ErrorCollection(
-    code="KAKAO_400_NULL_TOKEN",
+KAKAO_400_NOT_FOUND_TOKEN = ErrorCollection(
+    code="KAKAO_400_NOT_FOUND_TOKEN",
     status=status.HTTP_400_BAD_REQUEST,
     message="카카오로부터 받은 토큰을 보내주세요.",
 )
 
-JWT_400_NULL_TOKEN = ErrorCollection(
-    code="JWT_400_NULL_TOKEN",
-    status=status.HTTP_400_BAD_REQUEST,
+JWT_403_NOT_FOUND_REFRESHTOKEN = ErrorCollection(
+    code="JWT_403_NOT_FOUND_REFRESHTOKEN",
+    status=status.HTTP_403_FORBIDDEN,
     message="refresh_token을 보내주세요.",
 )
 
-JWT_401_TOKEN_EXPIRED = ErrorCollection(
-    code="JWT_401_TOKEN_EXPIRED",
-    status=status.HTTP_401_UNAUTHORIZED,
+JWT_403_EXPIRED_REFRESHTOKEN = ErrorCollection(
+    code="JWT_403_TOKEN_EXPIRED",
+    status=status.HTTP_403_FORBIDDEN,
     message="refresh_token이 만료되었습니다.",
 )
