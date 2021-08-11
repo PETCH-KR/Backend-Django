@@ -2,7 +2,7 @@ import os
 import jwt
 from rest_framework import exceptions
 from rest_framework import authentication
-from server.models import User
+from server.models import User, Organization
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
@@ -11,12 +11,16 @@ class JWTAuthentication(authentication.BaseAuthentication):
             token = request.headers.get("AUTHORIZATION")
             if token is None:
                 return None
-            jwt_token = token
+            token_type, jwt_token = token.split(" ")
             decoded = jwt.decode(
                 jwt_token, os.getenv("JWT_SECRET_KEY"), algorithms=["HS256"]
             )
             id = decoded.get("id")
-            user = User.objects.get(id=id)
+            if token_type is "Bearer":
+                user = User.objects.get(id=id)
+            # else:
+            # TODO : organization BigAutoField id 추가
+            #     user = Organization.objects.get(id=id)
             return (user, None)
         except jwt.exceptions.DecodeError:
             raise exceptions.AuthenticationFailed(
