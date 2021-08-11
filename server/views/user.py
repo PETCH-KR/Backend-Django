@@ -124,7 +124,7 @@ def signin(request):
     ),
     responses={
         200: success_util.SUCCESS_KAKAO.as_obj(),
-        400: error_collection.KAKAO_400_NULL_TOKEN.as_md(),
+        400: error_collection.KAKAO_400_NOT_FOUND_TOKEN.as_md(),
     },
 )
 @api_view(["POST"])
@@ -135,7 +135,7 @@ def kakao(request):
             {
                 "success": False,
                 "message": "카카오로부터 받은 토큰을 보내주세요.",
-                "code": "KAKAO_400_NULL_TOKEN",
+                "code": "KAKAO_400_NOT_FOUND_TOKEN",
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
@@ -177,8 +177,8 @@ def kakao(request):
     ),
     responses={
         200: success_util.SUCCESS_REFRESH_TOKEN.as_obj(),
-        400: error_collection.JWT_400_NULL_TOKEN.as_md(),
-        401: error_collection.JWT_401_TOKEN_EXPIRED.as_md(),
+        403: error_collection.JWT_403_NOT_FOUND_REFRESHTOKEN.as_md()
+        + error_collection.JWT_403_EXPIRED_REFRESHTOKEN.as_md(),
     },
 )
 @api_view(["POST"])
@@ -190,9 +190,9 @@ def refresh(request):
                 {
                     "success": False,
                     "message": "refresh_token을 보내주세요.",
-                    "code": "JWT_400_NULL_TOKEN",
+                    "code": "JWT_403_NOT_FOUND_REFRESHTOKEN",
                 },
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
         decoded = jwt.decode(
             refresh_token, os.getenv("REFRESH_SECRET_KEY"), algorithms=["HS256"]
@@ -218,9 +218,9 @@ def refresh(request):
             {
                 "success": False,
                 "message": "refresh_token이 만료되었습니다.",
-                "code": "JWT_401_TOKEN_EXPIRED",
+                "code": "JWT_403_EXPIRED_REFRESHTOKEN",
             },
-            status=status.HTTP_401_UNAUTHORIZED,
+            status=status.HTTP_403_FORBIDDEN,
         )
 
 
