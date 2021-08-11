@@ -52,7 +52,6 @@ class OrganizationForm(forms.ModelForm):
             "ceo",
             "description",
             "phone",
-            "phone",
             "images",
             "donation",
             "fax",
