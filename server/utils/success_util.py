@@ -1,4 +1,7 @@
 from drf_yasg import openapi
+from drf_yasg.openapi import Items
+
+from server.models import *
 
 
 class Success(object):
@@ -68,5 +71,121 @@ SUCCESS_REFRESH_TOKEN = Success(
             type=openapi.TYPE_STRING, description="리프레시 토큰"
         ),
         "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+    },
+)
+
+SUCCESS_ADD_USER_REVIEW = Success(
+    message="리뷰가 성공적으로 작성되었습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="리뷰 id"),
+        "comment": openapi.Schema(type=openapi.TYPE_STRING, description="리뷰 내용"),
+        "image": openapi.Schema(
+            type=openapi.TYPE_STRING,
+            description="리뷰 내용",
+        ),
+        "organization": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="기관 정보",
+            properties={
+                "_id": openapi.Schema(type=openapi.TYPE_STRING, description="기관 id"),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="기관명"),
+                "ceo": openapi.Schema(type=openapi.TYPE_STRING, description="CEO"),
+                "description": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 설명"
+                ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 전화번호"
+                ),
+                "images": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="이미지",
+                    items=Items(
+                        type=openapi.TYPE_STRING,
+                    ),
+                ),
+                "donation": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="후원계좌"
+                ),
+                "fax": openapi.Schema(type=openapi.TYPE_STRING, description="팩스"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "sns": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="SNS",
+                    items=Items(
+                        type=openapi.TYPE_OBJECT,
+                    ),
+                ),
+            },
+        ),
+        "user": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="유저 정보",
+            properties={
+                "id": openapi.Schema(type=openapi.TYPE_INTEGER, description="유저 id"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "phone": openapi.Schema(type=openapi.TYPE_STRING, description="전화번호"),
+                "passport": openapi.Schema(
+                    type=openapi.TYPE_BOOLEAN, description="여권 인증유무", default=False
+                ),
+            },
+        ),
+    },
+)
+
+SUCCESS_GET_USER_REVIEW = Success(
+    message="리뷰를 성공적으로 불러왔습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="리뷰 id"),
+        "comment": openapi.Schema(type=openapi.TYPE_STRING, description="리뷰 내용"),
+        "image": openapi.Schema(
+            type=openapi.TYPE_STRING,
+            description="리뷰 내용",
+        ),
+        "organization": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="기관 정보",
+            properties={
+                "_id": openapi.Schema(type=openapi.TYPE_STRING, description="기관 id"),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="기관명"),
+                "ceo": openapi.Schema(type=openapi.TYPE_STRING, description="CEO"),
+                "description": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 설명"
+                ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 전화번호"
+                ),
+                "images": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="이미지",
+                    items=Items(
+                        type=openapi.TYPE_STRING,
+                    ),
+                ),
+                "donation": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="후원계좌"
+                ),
+                "fax": openapi.Schema(type=openapi.TYPE_STRING, description="팩스"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "sns": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="SNS",
+                    items=Items(
+                        type=openapi.TYPE_OBJECT,
+                    ),
+                ),
+            },
+        ),
+        "user": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="유저 정보",
+            properties={
+                "id": openapi.Schema(type=openapi.TYPE_INTEGER, description="유저 id"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "phone": openapi.Schema(type=openapi.TYPE_STRING, description="전화번호"),
+                "passport": openapi.Schema(
+                    type=openapi.TYPE_BOOLEAN, description="여권 인증유무", default=False
+                ),
+            },
+        ),
     },
 )
