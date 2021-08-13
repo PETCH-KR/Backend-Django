@@ -30,6 +30,21 @@ class SNSForm(forms.ModelForm):
 
 
 class Organization(models.Model):
+    _id = models.ObjectIdField()
+    name = models.CharField(max_length=100)
+    ceo = models.CharField(max_length=100)
+    description = models.TextField()
+    phone = models.CharField(max_length=100)
+    images = models.ArrayField(model_container=Image, model_form_class=ImageForm)
+    donation = models.CharField(max_length=100)
+    fax = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    sns = models.ArrayField(model_container=SNS, model_form_class=SNSForm)
+    objects = models.DjongoManager()
+
+
+class AbstractOrganization(models.Model):
+    _id = models.ObjectIdField()
     name = models.CharField(max_length=100)
     ceo = models.CharField(max_length=100)
     description = models.TextField()
