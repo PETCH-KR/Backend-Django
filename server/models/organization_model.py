@@ -3,7 +3,7 @@ from django import forms
 
 
 class Image(models.Model):
-    url = models.URLField(max_length=200)
+    url = models.URLField(max_length=1000)
 
     class Meta:
         abstract = True
@@ -29,20 +29,6 @@ class SNSForm(forms.ModelForm):
         fields = ("sns", "name")
 
 
-class Organization(models.Model):
-    _id = models.ObjectIdField()
-    name = models.CharField(max_length=100)
-    ceo = models.CharField(max_length=100)
-    description = models.TextField()
-    phone = models.CharField(max_length=100)
-    images = models.ArrayField(model_container=Image, model_form_class=ImageForm)
-    donation = models.CharField(max_length=100)
-    fax = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
-    sns = models.ArrayField(model_container=SNS, model_form_class=SNSForm)
-    objects = models.DjongoManager()
-
-
 class AbstractOrganization(models.Model):
     _id = models.ObjectIdField()
     name = models.CharField(max_length=100)
@@ -57,6 +43,10 @@ class AbstractOrganization(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Organization(AbstractOrganization):
+    objects = models.DjongoManager()
 
 
 class OrganizationForm(forms.ModelForm):
