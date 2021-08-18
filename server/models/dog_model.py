@@ -11,7 +11,6 @@ class Dog(models.Model):
     deadline = models.DateField()
     createdAt = models.DateField(auto_now_add=True)
     destination = models.CharField(max_length=100)
-    # image = models.ImageField(upload_to="dogs", null=True)
     image = models.CharField(max_length=10000)
 
     organization = models.EmbeddedField(

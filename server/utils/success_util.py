@@ -70,3 +70,18 @@ SUCCESS_REFRESH_TOKEN = Success(
         "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
     },
 )
+
+#################
+#   DOG API     #
+#################
+
+SUCCESS_DOG_INFO = Success(
+    message="유기견 정보를 불러오는데 성공했습니다."
+    data={
+        "access_token": openapi.Schema(type=openapi.TYPE_STRING, description="액세스 토큰"),
+        "refresh_token": openapi.Schema(
+            type=openapi.TYPE_STRING, description="리프레시 토큰"
+        ),
+        "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+    },
+)

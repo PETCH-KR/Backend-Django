@@ -7,6 +7,7 @@ from bson import ObjectId
 from server.utils.upload import upload_image
 
 
+
 class DogAPIView(APIView):
     def post_image(self, request):
         image = request.FILES["image"]
