@@ -7,13 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            "password",
-            "email",
-            "phone",
-            "passport",
-            "provider",
-        ]
+        fields = "__all__"
 
     def create(self, validated_data):
         if validated_data.get("password"):
