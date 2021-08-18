@@ -234,6 +234,6 @@ from server.utils.upload import upload_image
 @api_view(["POST"])
 def upload_test(request):
     image = request.FILES["image"]
-    # image, 폴더명(review | dog | org ~etc)
+    # image, 폴더명(review | dog | org etc)
     public_uri = upload_image(image, "review")
     return Response({"url": public_uri})
