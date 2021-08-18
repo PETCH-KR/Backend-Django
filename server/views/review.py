@@ -134,3 +134,4 @@ class UserReviewAPIView(APIView):
                     "code": "REVIEW_400_ADD_REVIEW_FAILED",
                 }
             )
+

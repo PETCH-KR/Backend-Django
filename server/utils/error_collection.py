@@ -66,3 +66,16 @@ REVIEW_400_ADD_REVIEW_FAILED = ErrorCollection(
     status=status.HTTP_400_BAD_REQUEST,
     message="리뷰 저장 시 문제가 발생했습니다.",
 )
+
+
+DOG_400_ADD_FAILED = ErrorCollection(
+    code="DOG_400_ADD_FAILED",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="유기견 정보 저장 시 문제가 발생했습니다.",
+)
+
+DOG_400_MODIFY_FAILED = ErrorCollection(
+    code="DOG_400_MODIFY_FAILED",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="유기견 정보 수정 시 문제가 발생했습니다.",
+)
