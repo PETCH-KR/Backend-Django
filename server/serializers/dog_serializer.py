@@ -5,6 +5,21 @@ from server.models import Dog
 class DogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dog
+        # fields = [
+        #     "name",
+        #     "image",
+        #     "breed",
+        #     "organization",
+        #     "description",
+        #     "deadline",
+        #     "destination",
+        # ]
+        fields = "__all__"
+
+
+class DogBasicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dog
         fields = [
             "_id",
             "name",
@@ -22,6 +37,7 @@ class DogDescriptionSerializer(serializers.ModelSerializer):
         model = Dog
         fields = [
             "name",
+            "image",
             "breed",
             "organization",
             "description",
@@ -29,4 +45,10 @@ class DogDescriptionSerializer(serializers.ModelSerializer):
             "destination",
             "createdAt",
         ]
-        # fields="__all__"
+        # fields = "__all__"
+
+
+class DogInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dog
+        fields = ["name", "breed", "description", "image"]
