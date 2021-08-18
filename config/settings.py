@@ -168,3 +168,14 @@ GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
 
 DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
+
+
+# Swagger
+
+SWAGGER_SETTINGS = {
+    "SHOW_REQUEST_HEADERS": True,
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    },
+    "JSON_EDITOR": True,
+}

@@ -1,9 +1,8 @@
 # from django.db import models
 from djongo import models
-from .organization import Organization, OrganizationForm
+from .organization_model import AbstractOrganization, OrganizationForm
 from django.conf import settings
 from djongo.storage import GridFSStorage
-
 
 
 class Dog(models.Model):
@@ -17,7 +16,7 @@ class Dog(models.Model):
     image = models.ImageField(upload_to="dogs", null=True)
 
     organization = models.EmbeddedField(
-        model_container=Organization, model_form_class=OrganizationForm
+        model_container=AbstractOrganization, model_form_class=OrganizationForm
     )
 
     class Meta:

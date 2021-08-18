@@ -16,6 +16,7 @@ from server.utils import error_collection, success_util
 
 class SignupView(APIView):
     @swagger_auto_schema(
+        security=[],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -61,6 +62,7 @@ class SignupView(APIView):
 
 @swagger_auto_schema(
     methods=["POST"],
+    security=[],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
@@ -116,6 +118,7 @@ def signin(request):
 
 @swagger_auto_schema(
     methods=["POST"],
+    security=[],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
@@ -169,10 +172,11 @@ def kakao(request):
 
 @swagger_auto_schema(
     methods=["POST"],
+    security=[],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
-            "token": openapi.Schema(type=openapi.TYPE_STRING, description="리프레시 토큰"),
+            "token": openapi.Schema(type=openapi.IN_HEADER, description="리프레시 토큰"),
         },
     ),
     responses={

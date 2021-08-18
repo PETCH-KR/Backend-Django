@@ -16,11 +16,10 @@ class JWTAuthentication(authentication.BaseAuthentication):
                 jwt_token, os.getenv("JWT_SECRET_KEY"), algorithms=["HS256"]
             )
             id = decoded.get("id")
-            if token_type is "Bearer":
+            if token_type == "Bearer":
                 user = User.objects.get(id=id)
-            # else:
-            # TODO : organization BigAutoField id 추가
-            #     user = Organization.objects.get(id=id)
+            else:
+                user = Organization.objects.get(id=id)
             return (user, None)
         except jwt.exceptions.DecodeError:
             raise exceptions.AuthenticationFailed(

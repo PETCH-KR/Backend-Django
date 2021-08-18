@@ -1,12 +1,16 @@
 from django.contrib.auth.models import AbstractBaseUser
-from django.db import models
+from djongo import models
 from django.contrib.auth.models import UserManager
+import uuid
 
 
-class User(AbstractBaseUser):
-
+class BaseUser(AbstractBaseUser):
+    id = models.ObjectIdField(primary_key=True)
     email = models.EmailField(
-        max_length=100, unique=True, verbose_name="Email", help_text="이메일"
+        max_length=100,
+        unique=True,
+        verbose_name="Email",
+        help_text="이메일",
     )
     password = models.CharField(
         max_length=128, null=True, verbose_name="password", help_text="비밀번호"
@@ -28,7 +32,21 @@ class User(AbstractBaseUser):
         max_length=255, null=True, verbose_name="token", help_text="Refresh Token"
     )
 
+    class Meta:
+        abstract = True
+
+
+class User(BaseUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    def __str__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True

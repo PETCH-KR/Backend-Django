@@ -54,3 +54,15 @@ JWT_403_EXPIRED_REFRESHTOKEN = ErrorCollection(
     status=status.HTTP_403_FORBIDDEN,
     message="refresh_token이 만료되었습니다.",
 )
+
+REVIEW_400_NULL_REQUEST_DATA = ErrorCollection(
+    code="REVIEW_400_NULL_REQUEST_DATA",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="누락된 정보(이미지, 코멘트, 기관ID)가 있습니다. 확인해주세요.",
+)
+
+REVIEW_400_ADD_REVIEW_FAILED = ErrorCollection(
+    code="REVIEW_400_ADD_REVIEW_FAILED",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="리뷰 저장 시 문제가 발생했습니다.",
+)

@@ -3,7 +3,7 @@ from django import forms
 
 
 class Image(models.Model):
-    url = models.URLField(max_length=200)
+    url = models.URLField(max_length=1000)
 
     class Meta:
         abstract = True
@@ -29,7 +29,8 @@ class SNSForm(forms.ModelForm):
         fields = ("sns", "name")
 
 
-class Organization(models.Model):
+class AbstractOrganization(models.Model):
+    _id = models.ObjectIdField()
     name = models.CharField(max_length=100)
     ceo = models.CharField(max_length=100)
     description = models.TextField()
@@ -42,6 +43,10 @@ class Organization(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Organization(AbstractOrganization):
+    objects = models.DjongoManager()
 
 
 class OrganizationForm(forms.ModelForm):

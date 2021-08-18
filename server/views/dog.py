@@ -1,5 +1,5 @@
-from server.models.dog import Dog
-from server.serializers.dog import *
+from server.models.dog_model import Dog
+from server.serializers.dog_serializer import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -47,12 +47,13 @@ class DogDescriptionAPIView(APIView):
         }
         return Response(response_object)
 
+
 class DogImageAPIView(APIView):
     def post(self, request):
-        dog_serializer = DogImageSerializer(data = request.data)
+        dog_serializer = DogImageSerializer(data=request.data)
         print(dog_serializer)
         if dog_serializer.is_valid():
             dog_serializer.save()
             return Response({"message": "success"})
         else:
-            return Response ({"message": "fail"})
+            return Response({"message": "fail"})
