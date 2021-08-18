@@ -9,7 +9,7 @@ urlpatterns = [
     path("airport/<str:name>", views.AirportAPIView.as_view()),
     path("dog/search/", views.DogDstDateAPIView.as_view()),
     path("dog/desc/", views.DogSingleAPIView.as_view()),
-    path("dog/info/", views.DogDeadlineAPIView.as_view()),
+    path("dog/deadline/", views.DogDeadlineAPIView.as_view()),
     path("dog/add/", views.DogAddAPIView.as_view()),
     path("dog/modify/<str:_id>/", views.DogModifyAPIView.as_view()),
     path("upload/test", views.upload_test),

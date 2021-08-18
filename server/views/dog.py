@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from bson import ObjectId
 from server.utils.upload import upload_image
-from server.utils.json_util import jsonify
+from server.utils.json_util import jsonify, DateTimeEncoder
 from server.utils import success_util, error_collection
 
 from django.forms.models import model_to_dict
@@ -16,6 +16,8 @@ from drf_yasg import openapi
 
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser
+
+import json
 
 
 class DogAddAPIView(APIView):
@@ -87,7 +89,7 @@ class DogAddAPIView(APIView):
                 description="도착지",
             ),
             openapi.Parameter(
-                name="org_id",
+                name="organization",
                 in_=openapi.IN_FORM,
                 type=openapi.TYPE_STRING,
                 required=True,
@@ -96,7 +98,7 @@ class DogAddAPIView(APIView):
         ],
         responses={
             200: success_util.SUCCESS_ADD_DOG_INFO.as_obj(),
-            400: error_collection.REVIEW_400_NULL_REQUEST_DATA.as_md()
+            400: error_collection.DOG_400_NULL_REQUEST_DATA.as_md()
             + error_collection.DOG_400_ADD_FAILED.as_md(),
         },
     )
@@ -110,16 +112,29 @@ class DogAddAPIView(APIView):
 
         data["image"] = image_save
 
-        org_id = request.data["org_id"]
+        org_id = request.data["organization"]
         organization_data = Organization.objects.get(_id=ObjectId(org_id))
         organization_data = model_to_dict(organization_data)
+
         data["organization"] = organization_data
 
+        data["deadline"] = json.dumps(data["deadline"], cls=DateTimeEncoder)
+
+        print("\n\n\n", data["deadline"], "\n\n\n")
+
         serializer = DogInfoSerializer(data=data)
+
         if serializer.is_valid():
-            serializer.save()
-            return Response({"success": True, "message": "유기견 정보 저장 완료", "data": data})
+            new = serializer.save()
+            return Response(
+                {
+                    "success": True,
+                    "message": "유기견 정보 저장 완료",
+                    "data": jsonify(model_to_dict(new)),
+                }
+            )
         else:
+            print(serializer.errors)
             return Response(
                 {
                     "success": False,
@@ -204,7 +219,7 @@ class DogModifyAPIView(APIView):
                 description="도착지",
             ),
             openapi.Parameter(
-                name="org_id",
+                name="organization",
                 in_=openapi.IN_FORM,
                 type=openapi.TYPE_STRING,
                 required=True,
@@ -213,7 +228,7 @@ class DogModifyAPIView(APIView):
         ],
         responses={
             200: success_util.SUCCESS_ADD_DOG_INFO.as_obj(),
-            400: error_collection.REVIEW_400_NULL_REQUEST_DATA.as_md()
+            400: error_collection.DOG_400_NULL_REQUEST_DATA.as_md()
             + error_collection.DOG_400_MODIFY_FAILED.as_md(),
         },
     )
@@ -230,21 +245,28 @@ class DogModifyAPIView(APIView):
         data = request.data
         data["image"] = image_save
 
-        org_id = request.data["org_id"]
+        org_id = request.data["organization"]
         organization_data = Organization.objects.get(_id=ObjectId(org_id))
         organization_data = model_to_dict(organization_data)
         data["organization"] = organization_data
 
         serializer = DogSerializer(Dog, data=data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"success": True, "message": "유기견 정보 수정 완료", "data": data})
+            data = serializer.save()
+            return Response(
+                {
+                    "success": True,
+                    "message": "유기견 정보 수정 완료",
+                    "data": jsonify(model_to_dict(data)),
+                }
+            )
         else:
             return Response(
                 {
                     "success": False,
                     "message": "유기견 정보 수정 실패",
                     "code": "DOG_400_MODIFY_FAILED",
+                    "data": data,
                 }
             )
 
@@ -285,7 +307,7 @@ class DogSingleAPIView(APIView):
     )
     def get(self, request):
         desc = self.get_queryset(request)
-        serializer = DogDescriptionSerializer(desc)
+        serializer = DogSerializer(desc)
         desc_data = serializer.data
         desc_len = len(desc_data)
 
