@@ -117,12 +117,6 @@ class DogAddAPIView(APIView):
         organization_data = model_to_dict(organization_data)
 
         data["organization"] = organization_data
-
-        # data["deadline"] = json.dumps(data["deadline"], cls=DateTimeEncoder)
-        data["deadline"] = str(data["deadline"])
-        print("\n\n\n", data["deadline"], "\n\n\n")
-
-        # serializer = DogInfoSerializer(data=data)
         serializer = DogSerializer(data=data)
 
         if serializer.is_valid():
@@ -131,7 +125,7 @@ class DogAddAPIView(APIView):
                 {
                     "success": True,
                     "message": "유기견 정보 저장 완료",
-                    "data": jsonify(data),
+                    "data": jsonify(model_to_dict(new)),
                 }
             )
         else:
@@ -161,7 +155,7 @@ class DogModifyAPIView(APIView):
         except:
             return False
 
-    def get_DOGobject(self, _id):
+    def get_object(self, _id):
         try:
             return Dog.objects.get(_id=ObjectId(_id))
         except Dog.DoesNotExist:
@@ -253,12 +247,12 @@ class DogModifyAPIView(APIView):
 
         serializer = DogSerializer(Dog, data=data)
         if serializer.is_valid():
-            data = serializer.save()
+            new = serializer.save()
             return Response(
                 {
                     "success": True,
                     "message": "유기견 정보 수정 완료",
-                    "data": jsonify(model_to_dict(data)),
+                    "data": jsonify(model_to_dict(new)),
                 }
             )
         else:
@@ -267,7 +261,6 @@ class DogModifyAPIView(APIView):
                     "success": False,
                     "message": "유기견 정보 수정 실패",
                     "code": "DOG_400_MODIFY_FAILED",
-                    "data": data,
                 }
             )
 
@@ -279,10 +272,11 @@ class DogModifyAPIView(APIView):
     )
     def delete(self, request, _id):
         Dog = self.get_object(_id)
-        assert Dog
-
-        Dog.delete()
-        return Response({"success": True, "message": "삭제완료"})
+        if Dog:
+            Dog.delete()
+            return Response({"success": True, "message": "삭제완료"})
+        else:
+            return Response({"success":False, "message": "해당 유기견 정보가 존재하지 않습니다."})
 
 
 class DogSingleAPIView(APIView):
@@ -296,8 +290,10 @@ class DogSingleAPIView(APIView):
     def get_queryset(self, request):
         _id = request.GET["_id"]
         _id = ObjectId(_id)
-
-        match = Dog.objects.get(_id=_id)
+        try:
+            match = Dog.objects.get(_id=_id)
+        except:
+            return False
         return match
 
     @swagger_auto_schema(
@@ -308,15 +304,21 @@ class DogSingleAPIView(APIView):
     )
     def get(self, request):
         desc = self.get_queryset(request)
-        serializer = DogSerializer(desc)
-        desc_data = serializer.data
-        desc_len = len(desc_data)
-
-        response_object = {
-            "success": True,
-            "message": f"{desc_len}개의 유기견 세부사항 검색 결과가 나왔습니다.",
-            "data": {"dogs_data": desc_data},
+        if not desc:
+            response_object = {
+            "success": False,
+            "message": f"세부사항 검색이 실패하였습니다.",
         }
+        else:
+            serializer = DogSerializer(desc)
+            desc_data = serializer.data
+            desc_len = len(desc_data)
+
+            response_object = {
+                "success": True,
+                "message": f"{desc_data.name}의 세부사항 검색 결과가 나왔습니다.",
+                "data": jsonify(desc_data),
+            }
         return Response(response_object)
 
 
@@ -330,9 +332,11 @@ class DogDeadlineAPIView(APIView):
 
     def get_queryset(self, request):
         n = int(request.GET["number"])
-        match = Dog.objects.order_by("deadline", "name")[:n]
-        print(match)
-        return match
+        if n >= 0:
+            match = Dog.objects.order_by("deadline", "name")[:n]
+            return match
+        else:
+            return False
 
     @swagger_auto_schema(
         operation_description="Deadline정렬된 유기견의 정보를 불러오기",
@@ -342,15 +346,22 @@ class DogDeadlineAPIView(APIView):
     )
     def get(self, request):
         dog = self.get_queryset(request)
-        serializer = DogSerializer(dog, many=True)
-        dogs_data = serializer.data
-        dogs_len = len(dogs_data)
-        response_object = {
-            "success": True,
-            "message": f"{dogs_len}개의 유기견 검색 결과가 나왔습니다.",
-            "data": {"dogs_data": dogs_data},
-        }
-        return Response(response_object)
+        if dog:
+            serializer = DogSerializer(dog, many=True)
+            dogs_data = serializer.data
+            dogs_len = len(dogs_data)
+            response_object = {
+                "success": True,
+                "message": f"{dogs_len}개의 유기견 검색 결과가 나왔습니다.",
+                "data": jsonify(dogs_data),
+            }
+            return Response(response_object)
+        else:
+            response_object = {
+                "success": False,
+                "message": f"검색 개수는 0개 이상을 입력해주세요.",
+            }
+            return Response(response_object)
 
 
 class DogDstDateAPIView(APIView):
