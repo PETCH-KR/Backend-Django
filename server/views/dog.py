@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from bson import ObjectId
 from server.utils.upload import upload_image
-from server.utils.json_util import jsonify, DateTimeEncoder
+from server.utils.json_util import jsonify
 from server.utils import success_util, error_collection
 
 from django.forms.models import model_to_dict
@@ -277,7 +277,7 @@ class DogModifyAPIView(APIView):
             Dog.delete()
             return Response({"success": True, "message": "삭제완료"})
         else:
-            return Response({"success":False, "message": "해당 유기견 정보가 존재하지 않습니다."})
+            return Response({"success": False, "message": "해당 유기견 정보가 존재하지 않습니다."})
 
 
 class DogSingleAPIView(APIView):
@@ -307,9 +307,9 @@ class DogSingleAPIView(APIView):
         desc = self.get_queryset(request)
         if not desc:
             response_object = {
-            "success": False,
-            "message": f"세부사항 검색이 실패하였습니다.",
-        }
+                "success": False,
+                "message": f"세부사항 검색이 실패하였습니다.",
+            }
         else:
             serializer = DogSerializer(desc)
             desc_data = serializer.data
