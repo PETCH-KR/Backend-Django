@@ -118,11 +118,12 @@ class DogAddAPIView(APIView):
 
         data["organization"] = organization_data
 
-        data["deadline"] = json.dumps(data["deadline"], cls=DateTimeEncoder)
-
+        # data["deadline"] = json.dumps(data["deadline"], cls=DateTimeEncoder)
+        data["deadline"] = str(data["deadline"])
         print("\n\n\n", data["deadline"], "\n\n\n")
 
-        serializer = DogInfoSerializer(data=data)
+        # serializer = DogInfoSerializer(data=data)
+        serializer = DogSerializer(data=data)
 
         if serializer.is_valid():
             new = serializer.save()
@@ -130,7 +131,7 @@ class DogAddAPIView(APIView):
                 {
                     "success": True,
                     "message": "유기견 정보 저장 완료",
-                    "data": jsonify(model_to_dict(new)),
+                    "data": jsonify(data),
                 }
             )
         else:
