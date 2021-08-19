@@ -144,6 +144,7 @@ REST_FRAMEWORK = {
         "config.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
+    "DATE_INPUT_FORMATS": ["%Y-%m-%d"],
 }
 
 # Google Cloud Storage

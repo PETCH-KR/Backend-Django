@@ -10,17 +10,19 @@ class Dog(models.Model):
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
-    deadline = models.DateField()
+    deadline = models.DateField(auto_now_add=False)
     createdAt = models.DateField(auto_now_add=True)
     destination = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="dogs", null=True)
+    image = models.CharField(max_length=10000)
 
     organization = models.EmbeddedField(
         model_container=AbstractOrganization, model_form_class=OrganizationForm
     )
 
+    objects = models.DjongoManager()
+
     class Meta:
         ordering = ["name"]
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name

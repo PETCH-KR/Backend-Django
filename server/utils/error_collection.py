@@ -55,6 +55,7 @@ JWT_403_EXPIRED_REFRESHTOKEN = ErrorCollection(
     message="refresh_token이 만료되었습니다.",
 )
 
+
 REVIEW_400_NULL_REQUEST_DATA = ErrorCollection(
     code="REVIEW_400_NULL_REQUEST_DATA",
     status=status.HTTP_400_BAD_REQUEST,
@@ -65,4 +66,24 @@ REVIEW_400_ADD_REVIEW_FAILED = ErrorCollection(
     code="REVIEW_400_ADD_REVIEW_FAILED",
     status=status.HTTP_400_BAD_REQUEST,
     message="리뷰 저장 시 문제가 발생했습니다.",
+)
+
+# Dog API
+
+DOG_400_ADD_FAILED = ErrorCollection(
+    code="DOG_400_ADD_FAILED",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="유기견 정보 저장 시 문제가 발생했습니다.",
+)
+
+DOG_400_MODIFY_FAILED = ErrorCollection(
+    code="DOG_400_MODIFY_FAILED",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="유기견 정보 수정 시 문제가 발생했습니다.",
+)
+
+DOG_400_NULL_REQUEST_DATA = ErrorCollection(
+    code="REVIEW_400_NULL_REQUEST_DATA",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="누락된 정보(이름, 견종, 설명, 마감, 도착지, 이미지, 기관ID)가 있습니다. 확인해주세요.",
 )
