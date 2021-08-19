@@ -51,3 +51,4 @@ class AirportAPIView(APIView):
                 "data": {"airports_data": airports_data},
             }
         )
+

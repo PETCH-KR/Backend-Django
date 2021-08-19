@@ -189,3 +189,253 @@ SUCCESS_GET_USER_REVIEW = Success(
         ),
     },
 )
+
+SUCCESS_GET_DOG_SINGLE = Success(
+    message="정보를 성공적으로 불러왔습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 id"),
+        "name": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 이름"),
+        "breed": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 종류"),
+        "description": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 상세정보"),
+        "date": openapi.Schema(type=openapi.TYPE_STRING, description="출국 마감 날짜"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착지 공항"),
+        "image": openapi.Schema(
+            type=openapi.TYPE_STRING,
+            description="유기견 사진",
+        ),
+        "organization": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="기관 정보",
+            properties={
+                "_id": openapi.Schema(type=openapi.TYPE_STRING, description="기관 id"),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="기관명"),
+                "ceo": openapi.Schema(type=openapi.TYPE_STRING, description="CEO"),
+                "description": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 설명"
+                ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 전화번호"
+                ),
+                "images": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="이미지",
+                    items=Items(
+                        type=openapi.TYPE_STRING,
+                    ),
+                ),
+                "donation": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="후원계좌"
+                ),
+                "fax": openapi.Schema(type=openapi.TYPE_STRING, description="팩스"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "sns": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="SNS",
+                    items=Items(
+                        type=openapi.TYPE_OBJECT,
+                    ),
+                ),
+            },
+        ),
+    },
+)
+
+SUCCESS_GET_DOG_DEADLINE = Success(
+    message="정보를 성공적으로 불러왔습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 id"),
+        "name": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 이름"),
+        "breed": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 종류"),
+        "description": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 상세정보"),
+        "date": openapi.Schema(type=openapi.TYPE_STRING, description="출국 마감 날짜"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착지 공항"),
+        "image": openapi.Schema(
+            type=openapi.TYPE_STRING,
+            description="유기견 사진",
+        ),
+        "organization": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="기관 정보",
+            properties={
+                "_id": openapi.Schema(type=openapi.TYPE_STRING, description="기관 id"),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="기관명"),
+                "ceo": openapi.Schema(type=openapi.TYPE_STRING, description="CEO"),
+                "description": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 설명"
+                ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 전화번호"
+                ),
+                "images": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="이미지",
+                    items=Items(
+                        type=openapi.TYPE_STRING,
+                    ),
+                ),
+                "donation": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="후원계좌"
+                ),
+                "fax": openapi.Schema(type=openapi.TYPE_STRING, description="팩스"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "sns": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="SNS",
+                    items=Items(
+                        type=openapi.TYPE_OBJECT,
+                    ),
+                ),
+            },
+        ),
+    },
+)
+
+SUCCESS_GET_DOG_SEARCH = Success(
+    message="정보를 성공적으로 불러왔습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 id"),
+        "name": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 이름"),
+        "breed": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 종류"),
+        "description": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 상세정보"),
+        "date": openapi.Schema(type=openapi.TYPE_STRING, description="출국 마감 날짜"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착지 공항"),
+        "image": openapi.Schema(
+            type=openapi.TYPE_STRING,
+            description="유기견 사진",
+        ),
+        "organization": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="기관 정보",
+            properties={
+                "_id": openapi.Schema(type=openapi.TYPE_STRING, description="기관 id"),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="기관명"),
+                "ceo": openapi.Schema(type=openapi.TYPE_STRING, description="CEO"),
+                "description": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 설명"
+                ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 전화번호"
+                ),
+                "images": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="이미지",
+                    items=Items(
+                        type=openapi.TYPE_STRING,
+                    ),
+                ),
+                "donation": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="후원계좌"
+                ),
+                "fax": openapi.Schema(type=openapi.TYPE_STRING, description="팩스"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "sns": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="SNS",
+                    items=Items(
+                        type=openapi.TYPE_OBJECT,
+                    ),
+                ),
+            },
+        ),
+    },
+)
+
+SUCCESS_ADD_DOG_INFO = Success(
+    message="정보를 성공적으로 저장하였습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 id"),
+        "name": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 이름"),
+        "breed": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 종류"),
+        "description": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 상세정보"),
+        "date": openapi.Schema(type=openapi.TYPE_STRING, description="출국 마감 날짜"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착지 공항"),
+        "image": openapi.Schema(
+            type=openapi.TYPE_STRING,
+            description="유기견 사진",
+        ),
+        "organization": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="기관 정보",
+            properties={
+                "_id": openapi.Schema(type=openapi.TYPE_STRING, description="기관 id"),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="기관명"),
+                "ceo": openapi.Schema(type=openapi.TYPE_STRING, description="CEO"),
+                "description": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 설명"
+                ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 전화번호"
+                ),
+                "images": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="이미지",
+                    items=Items(
+                        type=openapi.TYPE_STRING,
+                    ),
+                ),
+                "donation": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="후원계좌"
+                ),
+                "fax": openapi.Schema(type=openapi.TYPE_STRING, description="팩스"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "sns": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="SNS",
+                    items=Items(
+                        type=openapi.TYPE_OBJECT,
+                    ),
+                ),
+            },
+        ),
+    },
+)
+
+SUCCESS_DELETE_DOG_SINGLE = Success(
+    message="정보를 성공적으로 삭제하였습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 id"),
+        "name": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 이름"),
+        "breed": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 종류"),
+        "description": openapi.Schema(type=openapi.TYPE_STRING, description="유기견 상세정보"),
+        "date": openapi.Schema(type=openapi.TYPE_STRING, description="출국 마감 날짜"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착지 공항"),
+        "image": openapi.Schema(
+            type=openapi.TYPE_STRING,
+            description="유기견 사진",
+        ),
+        "organization": openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            description="기관 정보",
+            properties={
+                "_id": openapi.Schema(type=openapi.TYPE_STRING, description="기관 id"),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="기관명"),
+                "ceo": openapi.Schema(type=openapi.TYPE_STRING, description="CEO"),
+                "description": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 설명"
+                ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="기관 전화번호"
+                ),
+                "images": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="이미지",
+                    items=Items(
+                        type=openapi.TYPE_STRING,
+                    ),
+                ),
+                "donation": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="후원계좌"
+                ),
+                "fax": openapi.Schema(type=openapi.TYPE_STRING, description="팩스"),
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "sns": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="SNS",
+                    items=Items(
+                        type=openapi.TYPE_OBJECT,
+                    ),
+                ),
+            },
+        ),
+    },
+)
