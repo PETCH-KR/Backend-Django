@@ -101,7 +101,10 @@ class UserReviewAPIView(APIView):
             }
             return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
 
-        data = {"comment": request.data["comment"]}
+        data = request.data.copy()
+        data.pop("org_id")
+
+
         if request.data.get("image"):
             image_save = self.post_image(request)
             data["image"] = image_save
@@ -110,12 +113,16 @@ class UserReviewAPIView(APIView):
         user_data = model_to_dict(user_data)
         user_data["id"] = user_id
         del user_data["password"]
+
         org_id = request.data["org_id"]
         organization_data = Organization.objects.get(_id=ObjectId(org_id))
         organization_data = model_to_dict(organization_data)
+
         data["user"] = user_data
         data["organization"] = organization_data
+        
         serializer = UserReviewSerializer(data=data)
+        
         if serializer.is_valid():
             new_review = serializer.save()
             return Response(
