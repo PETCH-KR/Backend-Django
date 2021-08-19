@@ -117,6 +117,7 @@ class DogAddAPIView(APIView):
         organization_data = model_to_dict(organization_data)
 
         data["organization"] = organization_data
+        print(data)
         serializer = DogSerializer(data=data)
 
         if serializer.is_valid():
