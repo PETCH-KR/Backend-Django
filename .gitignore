@@ -11,3 +11,4 @@ server/models/__pycache__/*
 server/views/__pycache__/*
 server/serializers/__pycache__/*
 server/migrations/__pycache__/*
+gcloud.json
