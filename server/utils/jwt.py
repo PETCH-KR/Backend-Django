@@ -6,7 +6,7 @@ import jwt
 def generate_access_token(user):
 
     access_token_payload = {
-        "id": user.id,
+        "id": str(user._id),
         "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1),
         "iat": datetime.datetime.utcnow(),
     }
@@ -18,7 +18,7 @@ def generate_access_token(user):
 
 def generate_refresh_token(user):
     refresh_token_payload = {
-        "id": user.id,
+        "id": str(user._id),
         "exp": datetime.datetime.utcnow() + datetime.timedelta(days=7),
         "iat": datetime.datetime.utcnow(),
     }
