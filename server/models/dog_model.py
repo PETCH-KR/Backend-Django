@@ -2,7 +2,6 @@
 from djongo import models
 from .organization_model import AbstractOrganization, OrganizationForm
 from django.conf import settings
-from djongo.storage import GridFSStorage
 
 
 class Dog(models.Model):

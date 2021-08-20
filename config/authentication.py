@@ -3,6 +3,7 @@ import jwt
 from rest_framework import exceptions
 from rest_framework import authentication
 from server.models import User, Organization
+from bson import ObjectId
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
@@ -17,9 +18,9 @@ class JWTAuthentication(authentication.BaseAuthentication):
             )
             id = decoded.get("id")
             if token_type == "Bearer":
-                user = User.objects.get(id=id)
+                user = User.objects.get(_id=ObjectId(id))
             else:
-                user = Organization.objects.get(id=id)
+                user = Organization.objects.get(_id=ObjectId(id))
             return (user, None)
         except jwt.exceptions.DecodeError:
             raise exceptions.AuthenticationFailed(

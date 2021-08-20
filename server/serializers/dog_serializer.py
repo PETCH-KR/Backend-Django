@@ -5,15 +5,6 @@ from server.models import Dog
 class DogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dog
-        # fields = [
-        #     "name",
-        #     "image",
-        #     "breed",
-        #     "organization",
-        #     "description",
-        #     "deadline",
-        #     "destination",
-        # ]
         fields = "__all__"
 
 

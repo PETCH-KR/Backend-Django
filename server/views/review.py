@@ -33,7 +33,7 @@ class UserReviewAPIView(APIView):
         },
     )
     def get(self, request):
-        user_id = request.user.id
+        user_id = request.user._id
         user_reviews = UserReview.objects.filter(user={"id": user_id})
         user_reviews = list(model_to_dict(review) for review in user_reviews)
         user_review_data = user_reviews
@@ -92,7 +92,7 @@ class UserReviewAPIView(APIView):
         },
     )
     def post(self, request):
-        user_id = request.user.id
+        user_id = request.user._id
         if not request.data.get("comment") or not request.data.get("org_id"):
             response_object = {
                 "success": False,
@@ -101,21 +101,26 @@ class UserReviewAPIView(APIView):
             }
             return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
 
-        data = {"comment": request.data["comment"]}
+        data = request.data.copy()
+        data.pop("org_id")
+
         if request.data.get("image"):
             image_save = self.post_image(request)
             data["image"] = image_save
 
-        user_data = User.objects.get(id=user_id)
+        user_data = User.objects.get(_id=ObjectId(user_id))
         user_data = model_to_dict(user_data)
-        user_data["id"] = user_id
         del user_data["password"]
+
         org_id = request.data["org_id"]
         organization_data = Organization.objects.get(_id=ObjectId(org_id))
         organization_data = model_to_dict(organization_data)
+
         data["user"] = user_data
         data["organization"] = organization_data
+
         serializer = UserReviewSerializer(data=data)
+
         if serializer.is_valid():
             new_review = serializer.save()
             return Response(
@@ -134,4 +139,3 @@ class UserReviewAPIView(APIView):
                     "code": "REVIEW_400_ADD_REVIEW_FAILED",
                 }
             )
-

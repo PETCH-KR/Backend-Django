@@ -5,7 +5,7 @@ import uuid
 
 
 class BaseUser(AbstractBaseUser):
-    id = models.ObjectIdField(primary_key=True)
+    _id = models.ObjectIdField(primary_key=True, db_column="_id")
     email = models.EmailField(
         max_length=100,
         unique=True,
