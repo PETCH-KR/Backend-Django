@@ -1,10 +1,10 @@
 # from django.db import models
 from djongo import models
 from .organization_model import AbstractOrganization, OrganizationForm
-from django.conf import settings
+from django import forms
 
 
-class Dog(models.Model):
+class AbstractDog(models.Model):
     _id = models.ObjectIdField(primary_key=True)
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
@@ -21,7 +21,11 @@ class Dog(models.Model):
     objects = models.DjongoManager()
 
     class Meta:
-        ordering = ["name"]
+        abstract = True
 
-    # def __str__(self):
-    #     return self.name
+
+class Dog(AbstractDog):
+    objects = models.DjongoManager()
+
+    class Meta:
+        ordering = ["name"]
