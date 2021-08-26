@@ -5,7 +5,7 @@ from django import forms
 
 
 class AbstractDog(models.Model):
-    _id = models.ObjectIdField(primary_key=True)
+    _id = models.ObjectIdField(primary_key=True, db_column="_id")
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.CharField(max_length=100)

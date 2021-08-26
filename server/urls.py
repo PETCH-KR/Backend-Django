@@ -14,6 +14,6 @@ urlpatterns = [
     path("dog/modify/<str:_id>/", views.DogModifyAPIView.as_view()),
     path("upload/test", views.upload_test),
     path("review/user", views.UserReviewAPIView.as_view()),
-    path("application/modify/", views.ApplicationAPIView.as_view()),
-    path("application/search/", views.ApplicationListAPIView.as_view()),
+    path("application/modify", views.ApplicationAPIView.as_view()),
+    path("application/search", views.ApplicationListAPIView.as_view()),
 ]

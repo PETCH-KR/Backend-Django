@@ -10,6 +10,7 @@ from server.utils.json_util import jsonify
 from server.utils import success_util, error_collection
 
 from django.forms.models import model_to_dict
+from django.db.models import Prefetch
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -27,6 +28,12 @@ class ApplicationAPIView(APIView):
 
     # permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser,)
+
+    def get_object(self, _id):
+        try:
+            return Application.objects.get(_id=ObjectId(_id))
+        except Application.DoesNotExist:
+            return False
 
     @swagger_auto_schema(
         operation_description="봉사신청 등록 API, 작성 시 header에 액세스토큰을 넣어야하고, 동기, 지원서, 목적지, 출국 날짜, 도착 날짜, 강아지 ID를 바디로 보내야 한다.",
@@ -88,10 +95,10 @@ class ApplicationAPIView(APIView):
         },
     )
     def post(self, request):
-        data = request.data
+        data = request.data.copy()
 
-        dog_id = request.data["organization"]
-        dog_data = Organization.objects.get(_id=ObjectId(dog_id))
+        dog_id = request.data["dog"]
+        dog_data = Dog.objects.get(_id=ObjectId(dog_id))
         dog_data = model_to_dict(dog_data)
 
         data["dog"] = dog_data
@@ -117,34 +124,20 @@ class ApplicationAPIView(APIView):
                 }
             )
 
-    def get_object(self, _id):
-        try:
-            return Application.objects.get(_id=ObjectId(_id))
-        except Application.DoesNotExist:
-            return False
-
     @swagger_auto_schema(
         operation_description="신청서 삭제하기",
         responses={
             200: success_util.SUCCESS_DELETE_APPLICATION.as_obj(),
         },
     )
-    def delete(self, request, _id):
+    def delete(self, request):
+        _id = request.GET["_id"]
         Application = self.get_object(_id)
         if Application:
             Application.delete()
             return Response({"success": True, "message": "삭제완료"})
         else:
             return Response({"success": False, "message": "해당 신청서가 존재하지 않습니다."})
-
-    def get_queryset(self, request):
-        _id = request.GET["_id"]
-        _id = ObjectId(_id)
-        try:
-            match = Application.objects.get(_id=_id)
-        except:
-            return False
-        return match
 
     @swagger_auto_schema(
         operation_description="해당 조건에 맞는 신청서 불러오기",
@@ -174,7 +167,7 @@ class ApplicationAPIView(APIView):
 
             response_object = {
                 "success": True,
-                "message": f"{desc_data.name}의 세부사항 검색 결과가 나왔습니다.",
+                "message": "세부사항 검색 결과가 나왔습니다.",
                 "data": jsonify(desc_data),
             }
         return Response(response_object)
@@ -189,11 +182,9 @@ class ApplicationListAPIView(APIView):
     parser_classes = (MultiPartParser,)
 
     def get_queryset(self, request):
-        applications = Application.objects.all()
         dog_id = request.GET["dog"]
-        dog = Dog.objects.get(pk=dog_id)
-
-        match = applications.filter(dog=dog)
+        dog_id = ObjectId(dog_id)
+        match = Application.objects.filter(dog={"_id": dog_id})
         return match
 
     @swagger_auto_schema(
@@ -218,7 +209,7 @@ class ApplicationListAPIView(APIView):
         app_len = len(application_data)
         response_object = {
             "success": True,
-            "message": f"{app_len}개의 유기견 검색 결과가 나왔습니다.",
+            "message": f"{app_len}개의 신청서 검색 결과가 나왔습니다.",
             "data": {"dogs_data": application_data},
         }
         return Response(response_object)
