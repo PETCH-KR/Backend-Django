@@ -6,7 +6,7 @@ from .dog_model import AbstractDog, Dog
 
 class Application(models.Model):
     _id = models.ObjectIdField(primary_key=True)
-    motivation = models.CharField(maxlength=500)
+    motivation = models.CharField(max_length=500)
     resume = models.CharField(max_length=1000)
     departure = models.CharField(max_length=10)
     destination = models.CharField(max_length=10)
