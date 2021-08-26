@@ -15,6 +15,9 @@ class BaseUser(AbstractBaseUser):
     password = models.CharField(
         max_length=128, null=True, verbose_name="password", help_text="비밀번호"
     )
+    name = models.CharField(
+        max_length=20, null=True, verbose_name="name", help_text="이름"
+    )
     phone = models.CharField(
         max_length=15, null=True, verbose_name="phone", help_text="전화번호"
     )
