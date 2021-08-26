@@ -13,5 +13,5 @@ class Application(models.Model):
     departureDate = models.DateField(auto_now_add=False)
     arrivalDate = models.DateField(auto_now_add=False)
     dog = models.EmbeddedField(model_container=AbstractDog)
-    userEmail = model.CharField(max_length=100)
+    userEmail = models.CharField(max_length=100)
     objects = models.DjongoManager()
