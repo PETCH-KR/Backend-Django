@@ -24,6 +24,7 @@ class SignupView(APIView):
                 "password": openapi.Schema(
                     type=openapi.TYPE_STRING, description="비밀번호"
                 ),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="이름"),
             },
         ),
         responses={
