@@ -17,12 +17,25 @@ class ErrorCollection(object):
 SIGNUP_400_NULL_EMAIL_PASSWORD = ErrorCollection(
     code="SIGNUP_400_INVALID_EMAIL_PASSWORD",
     status=status.HTTP_400_BAD_REQUEST,
-    message="이메일 또는 비밀번호를 입력해주세요.",
+    message="이메일,비밀번호 또는 닉네임을 입력해주세요.",
 )
+
 SIGNUP_400_EMAIL_ALREADY_EXIST = ErrorCollection(
     code="SIGNUP_400_EMAIL_ALREADY_EXIST",
     status=status.HTTP_400_BAD_REQUEST,
     message="이미 사용중인 이메일입니다.",
+)
+
+SIGNUP_400_NAME_ALREADY_EXIST = ErrorCollection(
+    code="SIGNUP_400_NAME_ALREADY_EXIST",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="이미 사용중인 닉네임입니다.",
+)
+
+SIGNUP_400_NULL_EMAIL = ErrorCollection(
+    code="SIGNUP_400_NULL_EMAIL",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="이메일을 입력해주세요.",
 )
 
 SIGNIN_400_NULL_EMAIL_PASSWORD = ErrorCollection(
@@ -83,7 +96,20 @@ DOG_400_MODIFY_FAILED = ErrorCollection(
 )
 
 DOG_400_NULL_REQUEST_DATA = ErrorCollection(
-    code="REVIEW_400_NULL_REQUEST_DATA",
+    code="DOG_400_NULL_REQUEST_DATA",
     status=status.HTTP_400_BAD_REQUEST,
     message="누락된 정보(이름, 견종, 설명, 마감, 도착지, 이미지, 기관ID)가 있습니다. 확인해주세요.",
+)
+
+# Application API
+APPLICATION_400_NULL_REQUEST_DATA = ErrorCollection(
+    code="APPLICATION_400_NULL_REQUEST_DATA",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="누락된 정보(동기, 지원서, 목적지, 출국 날짜, 도착 날짜, 강아지 ID)가 있습니다. 확인해주세요.",
+)
+
+APPLICATION_400_ADD_FAILED = ErrorCollection(
+    code="APPLICATION_400_ADD_FAILED",
+    status=status.HTTP_400_BAD_REQUEST,
+    message="지원서 저장 시 문제가 발생했습니다.",
 )

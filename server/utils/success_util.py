@@ -89,6 +89,22 @@ dog_schema = openapi.Schema(
     },
 )
 
+application_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    description="봉사 신청서",
+    properties={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="신청서 id"),
+        "motivation": openapi.Schema(type=openapi.TYPE_STRING, description="동기"),
+        "resume": openapi.Schema(type=openapi.TYPE_STRING, description="신청서"),
+        "departure": openapi.Schema(type=openapi.TYPE_STRING, description="출국 공항"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착 공항"),
+        "departureDate": openapi.Schema(type=openapi.TYPE_STRING, description="출국 날짜"),
+        "arrivalDate": openapi.Schema(type=openapi.TYPE_STRING, description="도착 날짜"),
+        "userEmail": openapi.Schema(type=openapi.TYPE_STRING, description="사용자 email"),
+        "dog": dog_schema,
+    },
+)
+
 
 SUCCESS_SIGNUP = Success(
     message="회원가입에 성공했습니다.",
@@ -124,6 +140,14 @@ SUCCESS_KAKAO = Success(
         "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
     },
 )
+
+SUCCESS_VERIFY_EMAIL = Success(
+    message="사용가능한 이메일입니다",
+    data={
+        "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+    },
+)
+
 
 SUCCESS_REFRESH_TOKEN = Success(
     message="access_token이 재발급되었습니다.",
@@ -246,5 +270,52 @@ SUCCESS_DELETE_DOG_SINGLE = Success(
             description="유기견 사진",
         ),
         "organization": organization_schema,
+    },
+)
+
+# APPLICATION
+
+SUCCESS_ADD_APPLICATION = Success(
+    message="정보를 성공적으로 저장하였습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="신청서 id"),
+        "motivation": openapi.Schema(type=openapi.TYPE_STRING, description="동기"),
+        "resume": openapi.Schema(type=openapi.TYPE_STRING, description="신청서"),
+        "departure": openapi.Schema(type=openapi.TYPE_STRING, description="출국 공항"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착 공항"),
+        "departureDate": openapi.Schema(type=openapi.TYPE_STRING, description="출국 날짜"),
+        "arrivalDate": openapi.Schema(type=openapi.TYPE_STRING, description="도착 날짜"),
+        "userEmail": openapi.Schema(type=openapi.TYPE_STRING, description="사용자 email"),
+        "dog": dog_schema,
+    },
+)
+
+SUCCESS_DELETE_APPLICATION = Success(
+    message="정보를 성공적으로 삭제하였습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="신청서 id"),
+        "motivation": openapi.Schema(type=openapi.TYPE_STRING, description="동기"),
+        "resume": openapi.Schema(type=openapi.TYPE_STRING, description="신청서"),
+        "departure": openapi.Schema(type=openapi.TYPE_STRING, description="출국 공항"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착 공항"),
+        "departureDate": openapi.Schema(type=openapi.TYPE_STRING, description="출국 날짜"),
+        "arrivalDate": openapi.Schema(type=openapi.TYPE_STRING, description="도착 날짜"),
+        "userEmail": openapi.Schema(type=openapi.TYPE_STRING, description="사용자 email"),
+        "dog": dog_schema,
+    },
+)
+
+SUCCESS_GET_APPLICATION_SEARCH = Success(
+    message="정보를 성공적으로 불러왔습니다.",
+    data={
+        "_id": openapi.Schema(type=openapi.TYPE_STRING, description="신청서 id"),
+        "motivation": openapi.Schema(type=openapi.TYPE_STRING, description="동기"),
+        "resume": openapi.Schema(type=openapi.TYPE_STRING, description="신청서"),
+        "departure": openapi.Schema(type=openapi.TYPE_STRING, description="출국 공항"),
+        "destination": openapi.Schema(type=openapi.TYPE_STRING, description="도착 공항"),
+        "departureDate": openapi.Schema(type=openapi.TYPE_STRING, description="출국 날짜"),
+        "arrivalDate": openapi.Schema(type=openapi.TYPE_STRING, description="도착 날짜"),
+        "userEmail": openapi.Schema(type=openapi.TYPE_STRING, description="사용자 email"),
+        "dog": dog_schema,
     },
 )
