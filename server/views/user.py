@@ -24,20 +24,25 @@ class SignupView(APIView):
                 "password": openapi.Schema(
                     type=openapi.TYPE_STRING, description="비밀번호"
                 ),
-                "name": openapi.Schema(type=openapi.TYPE_STRING, description="이름"),
+                "name": openapi.Schema(type=openapi.TYPE_STRING, description="닉네임"),
             },
         ),
         responses={
             201: success_util.SUCCESS_SIGNUP.as_obj(),
             400: error_collection.SIGNUP_400_EMAIL_ALREADY_EXIST.as_md()
+            + error_collection.SIGNUP_400_NAME_ALREADY_EXIST.as_md()
             + error_collection.SIGNUP_400_NULL_EMAIL_PASSWORD.as_md(),
         },
     )
     def post(self, request):
-        if not request.data.get("password") or not request.data.get("email"):
+        if (
+            not request.data.get("password")
+            or not request.data.get("email")
+            or not request.data.get("name")
+        ):
             response_object = {
                 "success": False,
-                "message": "이메일 또는 비밀번호를 입력해주세요.",
+                "message": "이메일,비밀번호 또는 닉네임을 입력해주세요.",
                 "code": "SIGNUP_400_NULL_EMAIL_PASSWORD",
             }
             return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
@@ -59,6 +64,57 @@ class SignupView(APIView):
                     "code": "SIGNUP_400_EMAIL_ALREADY_EXIST",
                 }
                 return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
+            elif serializer.errors["name"]:
+                response_object = {
+                    "success": False,
+                    "message": "이미 사용중인 닉네임입니다.",
+                    "code": "SIGNUP_400_NAME_ALREADY_EXIST",
+                }
+                return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    methods=["POST"],
+    security=[],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+        },
+    ),
+    responses={
+        200: success_util.SUCCESS_VERIFY_EMAIL.as_obj(),
+        400: error_collection.SIGNUP_400_NULL_EMAIL.as_md(),
+    },
+)
+@api_view(["POST"])
+def verify_email(request):
+    email = request.data.get("email")
+    if not email:
+        return Response(
+            {
+                "success": False,
+                "message": "이메일을 입력해주세요.",
+                "code": "SIGNUP_400_NULL_EMAIL",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    ex_user = User.objects.filter(email=email)
+    print(len(ex_user))
+    if len(ex_user) == 0:
+        return Response(
+            {"success": True, "message": "사용 가능한 이메일입니다.", "data": {"email": email}},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    else:
+        return Response(
+            {
+                "success": False,
+                "code": "SIGNUP_400_EMAIL_ALREADY_EXIST",
+                "message": "이미 사용중인 이메일입니다.",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 @swagger_auto_schema(
