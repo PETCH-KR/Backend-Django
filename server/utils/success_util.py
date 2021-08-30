@@ -125,6 +125,14 @@ SUCCESS_KAKAO = Success(
     },
 )
 
+SUCCESS_VERIFY_EMAIL = Success(
+    message="사용가능한 이메일입니다",
+    data={
+        "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+    },
+)
+
+
 SUCCESS_REFRESH_TOKEN = Success(
     message="access_token이 재발급되었습니다.",
     data={
