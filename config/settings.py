@@ -43,11 +43,14 @@ INSTALLED_APPS = [
     "drf_yasg",
     "rest_framework",
     "django_extensions",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -180,3 +183,9 @@ SWAGGER_SETTINGS = {
     },
     "JSON_EDITOR": True,
 }
+
+
+# CORS
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
