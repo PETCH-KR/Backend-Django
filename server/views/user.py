@@ -104,7 +104,6 @@ def verify_email(request):
     if len(ex_user) == 0:
         return Response(
             {"success": True, "message": "사용 가능한 이메일입니다.", "data": {"email": email}},
-            status=status.HTTP_400_BAD_REQUEST,
         )
     else:
         return Response(
