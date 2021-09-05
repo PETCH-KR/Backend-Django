@@ -1,12 +1,17 @@
+import json
 import os
 import jwt
 import requests
+import random
+
+from bson import ObjectId
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from server.serializers import UserSerializer
+from rest_framework.decorators import api_view, permission_classes
+from server.serializers import UserSerializer, ChangePasswordSerializer
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from server.models import User
@@ -100,7 +105,6 @@ def verify_email(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
     ex_user = User.objects.filter(email=email)
-    print(len(ex_user))
     if len(ex_user) == 0:
         return Response(
             {"success": True, "message": "사용 가능한 이메일입니다.", "data": {"email": email}},
@@ -284,12 +288,77 @@ def refresh(request):
         )
 
 
-from server.utils.upload import upload_image
-
-
+@swagger_auto_schema(
+    methods=["POST"],
+    security=[],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "email": openapi.Schema(
+                type=openapi.TYPE_STRING, description="인증번호 받을 이메일"
+            ),
+        },
+    ),
+    responses={
+        200: success_util.SUCCESS_SEND_RESET_EMAIL.as_obj(),
+    },
+)
 @api_view(["POST"])
-def upload_test(request):
-    image = request.FILES["image"]
-    # image, 폴더명(review | dog | org etc)
-    public_uri = upload_image(image, "review")
-    return Response({"url": public_uri})
+def send_reset_password_email(request):
+    reciever = request.data.get("email")
+    verified_number = random.randrange(100000, 999999)
+    requests.post(
+        "https://api.mailgun.net/v3/ziho-dev.com/messages",
+        auth=("api", os.getenv("MAILGUN_API_KEY")),
+        data={
+            "from": "cau.capstone10@gmail.com",
+            "to": reciever,
+            "subject": "[Petch] 비밀번호 찾기 인증번호 안내",
+            "template": "petch-password",
+            "h:X-Mailgun-Variables": json.dumps({"verified_number": verified_number}),
+        },
+    )
+    return Response(
+        {
+            "success": True,
+            "message": "비밀번호 찾기 메일이 전송되었습니다.",
+            "data": {
+                "verified_number": verified_number,
+            },
+        }
+    )
+
+
+@swagger_auto_schema(
+    methods=["POST"],
+    security=[],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+            "new_password": openapi.Schema(
+                type=openapi.TYPE_STRING, description="변경할 비밀번호"
+            ),
+        },
+    ),
+    responses={
+        200: success_util.SUCCESS_RESET_PASSWORD.as_obj(),
+    },
+)
+@api_view(["POST"])
+def reset_user_password(request):
+    serializer = ChangePasswordSerializer(data=request.data)
+    if serializer.is_valid():
+        email = request.data.get("email")
+        user = User.objects.get(email=email)
+        user.set_password(request.data.get("new_password"))
+        user.save()
+        response = {
+            "succes": True,
+            "message": "비밀번호가 성공적으로 변경되었습니다.",
+            "data": {"email": email},
+        }
+
+        return Response(response)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
