@@ -195,4 +195,4 @@ CORS_ALLOW_CREDENTIALS = True
 
 # CHAT
 
-ASGI_APPLICATION = "core.routing.application"
+ASGI_APPLICATION = "config.routing.application"
