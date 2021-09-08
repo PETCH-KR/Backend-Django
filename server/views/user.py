@@ -354,7 +354,7 @@ def reset_user_password(request):
         user.set_password(request.data.get("new_password"))
         user.save()
         response = {
-            "succes": True,
+            "success": True,
             "message": "비밀번호가 성공적으로 변경되었습니다.",
             "data": {"email": email},
         }
