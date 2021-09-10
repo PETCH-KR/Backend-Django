@@ -196,3 +196,6 @@ CORS_ALLOW_CREDENTIALS = True
 # CHAT
 
 ASGI_APPLICATION = "config.routing.application"
+
+# Need to change to redis
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
