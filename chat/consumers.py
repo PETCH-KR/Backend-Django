@@ -33,19 +33,6 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 
         # need a broker --> config.settings CHANNEL_LAYERS
 
-    #     # send message to the group
-    #     await self.channel_layer.group_send(
-    #         self.room_group_name,
-    #         {"type": "tester_message", "tester": "someone new joined"},
-    #     )
-
-    # async def tester_message(self, event):
-    #     # collect data from the gropup_send
-    #     tester = event["tester"]
-
-    #     # send the messgae
-    #     await self.send(text_data=json.dumps({"tester": tester}))
-
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
