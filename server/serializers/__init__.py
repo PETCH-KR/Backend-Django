@@ -5,3 +5,4 @@ from .dog_serializer import *
 from .review_serializer import *
 from .application_serializer import *
 from .chatroom_serializer import *
+from .change_password_serializer import *

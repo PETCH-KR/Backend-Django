@@ -160,6 +160,23 @@ SUCCESS_REFRESH_TOKEN = Success(
     },
 )
 
+
+SUCCESS_SEND_RESET_EMAIL = Success(
+    message="비밀번호 찾기 메일이 전송되었습니다.",
+    data={
+        "verified_number": openapi.Schema(
+            type=openapi.TYPE_INTEGER, description="인증번호"
+        ),
+    },
+)
+
+SUCCESS_RESET_PASSWORD = Success(
+    message="비밀번호 찾기 메일이 전송되었습니다.",
+    data={
+        "email": openapi.Schema(type=openapi.TYPE_INTEGER, description="이메일"),
+    },
+)
+
 SUCCESS_ADD_USER_REVIEW = Success(
     message="리뷰가 성공적으로 작성되었습니다.",
     data={
