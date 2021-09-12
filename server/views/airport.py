@@ -1,59 +1,54 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from rest_framework.parsers import JSONParser
-from server.models.airport import Airport
-from server.serializers.airport import *
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from server.serializers.airport_serializer import *
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework import mixins
-from rest_framework.authentication import (
-    SessionAuthentication,
-    BasicAuthentication,
-    TokenAuthentication,
-)
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import viewsets
-from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 
-class AirportViewSet(viewsets.ModelViewSet):
-    lookup_field = "IATA"
-    serializer_class = AirportSerializer
-    queryset = Airport.objects.all()
+class AirportAPIView(APIView):
+    """
+    공항 검색 API
+    ---
+    국가 및 공항명 검색
+    """
 
+    success_field = openapi.Schema(
+        "success", description="성공 여부", type=openapi.TYPE_BOOLEAN
+    )
+    message_field = openapi.Schema(
+        "detail", description="메세지", type=openapi.TYPE_STRING
+    )
+    data_field = openapi.Schema("data", description="검색 결과", type=openapi.TYPE_OBJECT)
+    success_resp = openapi.Schema(
+        "response",
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "success": success_field,
+            "message": message_field,
+            "data": data_field,
+        },
+    )
 
-class AirportGenericAPIView(
-    generics.GenericAPIView,
-    mixins.ListModelMixin,
-    mixins.CreateModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.DestroyModelMixin,
-):
-    serializer_class = AirportSerializer
-    queryset = Airport.objects.all()
+    def get_object(self, name):
+        queryset = Airport.objects.all()
+        name_match = queryset.filter(name__contains=name)
+        country_match = queryset.filter(country__contains=name)
+        IATA_match = queryset.filter(IATA__contains=name)
+        result = name_match | country_match | IATA_match
 
-    lookup_field = "id"  # add keyword argument
+        return result
 
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]  # check session first, then basic
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    @swagger_auto_schema(responses={200: success_resp})
+    def get(self, request, name):
+        airport = self.get_object(name)
+        serializer = AirportSerializer(airport, many=True)
+        airports_data = serializer.data
+        airports_len = len(airports_data)
+        return Response(
+            {
+                "success": True,
+                "message": f"{airports_len}개의 공항 검색 결과가 나왔습니다.",
+                "data": {"airports_data": airports_data},
+            }
+        )
 
-    def get(self, request, IATA):
-        if IATA:
-            return self.retrieve(request)
-        else:
-            return self.list(request)  # ListModelMixin will handle
-
-    def post(self, request):
-        return self.create(request)  # CreateModelMixin will handle
-
-    def put(self, request, id=None):
-        return self.update(request, id)  # UpdateModelMixin will handle
-
-    def delete(self, request, id):
-        return self.destroy(request, id)

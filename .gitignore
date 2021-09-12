@@ -1,1 +1,14 @@
 .vscode
+.json
+.idea
+.env
+*/__pycache__/*
+*/*/__pycache__/*
+*/*/*/__pycache__/*
+config/__pycache__/*
+server/__pycache__/*
+server/models/__pycache__/*
+server/views/__pycache__/*
+server/serializers/__pycache__/*
+server/migrations/__pycache__/*
+gcloud.json
