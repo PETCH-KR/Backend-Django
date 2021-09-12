@@ -22,7 +22,7 @@ django-storages = {extras = ["google"], version = "*"}
 pillow = "*"
 channels = "*"
 channels-redis = "*"
-
+whitenoise = "*"
 [dev-packages]
 black = "*"
 
