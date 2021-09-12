@@ -6,3 +6,4 @@ from .application_model import *
 
 from .user_review_model import *
 from .organization_review_model import *
+from .chatroom_model import *
