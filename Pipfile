@@ -20,8 +20,9 @@ google-auth-httplib2 = "*"
 google-auth-oauthlib = "*"
 django-storages = {extras = ["google"], version = "*"}
 pillow = "*"
+channels = "*"
+channels-redis = "*"
 whitenoise = "*"
-
 [dev-packages]
 black = "*"
 
