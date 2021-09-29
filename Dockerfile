@@ -8,7 +8,6 @@ RUN apt-get update \
   python3 python3-pip python3-dev python3-venv build-essential libpq-dev \
   && rm -rf /var/lib/apt/lists/*
 RUN pip install -r requirements.txt
-RUN chmod +x /app/run.sh
 EXPOSE 8000
 
 ENTRYPOINT ["/app/run.sh"]
