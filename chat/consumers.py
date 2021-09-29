@@ -52,8 +52,6 @@ urls -> views
 routing -> consumers
 """
 
-
-
 class ChatRoomConsumer(AsyncWebsocketConsumer):
     # Start connection
     async def connect(self):  # calling it will return coroutine(?) object
