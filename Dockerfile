@@ -9,5 +9,3 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 RUN pip install -r requirements.txt
 EXPOSE 8000
-
-ENTRYPOINT ["/app/run.sh"]
