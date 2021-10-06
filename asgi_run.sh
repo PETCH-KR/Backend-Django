@@ -6,4 +6,4 @@ python manage.py makemigrations
 
 python manage.py migrate
 
-daphne -e ssl:8443:privateKey=/etc/letsencrypt/live/ziho-dev.com/privkey.pem: certKey=/etc/letsencrypt/live/ziho-dev.com/cert.pem config.asgi:application
+daphne -e ssl:8443:privateKey=privkey.pem: certKey=cert.pem config.asgi:application
