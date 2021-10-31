@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
 
 import os
 
-from django.core.asgi import get_asgi_application
+# from django.core.asgi import get_asgi_application
+from channels.routing import get_default_application
+import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+django.setup()
+application = get_default_application()
 
-application = get_asgi_application()
+# application = get_asgi_application()

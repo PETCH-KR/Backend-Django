@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-rjdhii^8xap9^&1j6q0t&iegh)&9v%g3hb_j@8e$-*y^f=f4ju"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -38,14 +39,22 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "drf_yasg",
     "rest_framework",
     "django_extensions",
+    "corsheaders",
+    "channels",
+    "chat",
 ]
 
+
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -82,9 +91,7 @@ DATABASES = {
         "ENGINE": "djongo",
         "NAME": "Petch",
         "ENFORCE_SCHEMA": False,
-        "CLIENT": {
-            "host": "mongodb+srv://capstone:capstone@cluster0.yzq7p.mongodb.net/Petch?retryWrites=true&w=majority"
-        },
+        "CLIENT": {"host": os.getenv("MONGO_HOST")},
     }
 }
 
@@ -130,3 +137,83 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Auth
+
+AUTH_USER_MODEL = "server.User"
+
+# Django Rest Framework
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "config.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DATE_INPUT_FORMATS": ["%Y-%m-%d"],
+}
+
+# Google Cloud Storage
+
+GS_PROJECT_ID = os.getenv("GS_PROJECT_ID", "")
+GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME", "")
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
+    {
+        "type": "service_account",
+        "project_id": GS_PROJECT_ID,
+        "private_key_id": os.getenv("GS_PRIVATE_KEY_ID", ""),
+        "private_key": os.getenv("GS_PRIVATE_KEY", "").replace("\\n", "\n"),
+        "client_email": os.getenv("GS_CLIENT_EMAIL", ""),
+        "client_id": os.getenv("GS_CLIENT_ID", ""),
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": os.getenv("GS_CLIENT_x509_CERT_URL", ""),
+    }
+)
+
+DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
+
+
+# Swagger
+
+SWAGGER_SETTINGS = {
+    "SHOW_REQUEST_HEADERS": True,
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    },
+    "JSON_EDITOR": True,
+}
+
+
+# CORS
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+# CHAT
+
+ASGI_APPLICATION = "config.routing.application"
+
+# Need to change to redis
+
+# CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+
+# RADIS CHANNEL LAYER
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("localhost", 6379)]},
+    },
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": ("localhost", 6379),
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+    }
+}
